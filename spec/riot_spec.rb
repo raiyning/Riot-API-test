@@ -4,13 +4,17 @@ describe 'latest service riot api' do
 
   before(:all) do
     @api_key = ENV['RIOT_API_KEY']
-    @riot = RiotServices.new
-    @riot.latest_service(@api_key)
-    puts @riot.retrieve_name
+    @api_calling = ParseJSON.new(HTTParty::get("https://euw1.api.riotgames.com/lol/summoner/v4/summoners/by-name/thefraction?api_key=#{@api_key}").body).json_data
+    puts @api_calling
   end
 
+
   it 'should be a string' do
-    expect(riot.retrieve_name).to be_kind_of(String)
+    expect(@api_calling.retrieve_name).to be_kind_of(String)
+  end
+
+  it 'The name of the player should be' do
+    expect(@api_calling['name']).to eq('theFraction')
   end
 end
 
